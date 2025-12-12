@@ -1,12 +1,13 @@
 "use client";
-import { aggiungiLuogo, getPlaceFromId } from "@/src/actions/places_actions";
+import { aggiungiLuogo, deleteLuogo, getPlaceFromId } from "@/src/actions/places_actions";
 import { useUser } from "@/src/context/UserContext";
 import { handleConfetti } from "@/src/utils/confetti";
 import { generateMapHTML } from "@/src/utils/map";
 import clsx from "clsx";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { BiCheck, BiErrorAlt, BiWorld, BiSend, BiSolidBolt, BiSearch, BiRightArrowAlt, BiMapAlt, BiEditAlt, BiTime } from "react-icons/bi";
+import { BiCheck, BiErrorAlt, BiWorld, BiSend, BiSolidBolt, BiSearch, BiRightArrowAlt, BiMapAlt, BiEditAlt, BiTime, BiHome, BiInfoCircle, BiTrash } from "react-icons/bi";
 
 interface Props {
     id: string;
@@ -19,6 +20,7 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
 
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
+    const [count, setCount] = useState(0)
     const [errorMsg, setErrorMsg] = useState<{ success?: boolean; error?: string; }>({ success: true });
     const [searchString, setSearchString] = useState("")
     const [loading, setLoading] = useState(false)
@@ -33,7 +35,10 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
         hasPowerSockets: false,
         hasAir: false,
         hasHeating: false,
+        hasSmart: false,
+        hasSilence: false,
         hasTicket: false,
+        hasConsumption: false,
     });
     const [openingHours, setOpeningHours] = useState([
         { dayOfWeek: 0, isOpen: false, openTime: "09:00", closeTime: "21:00" },
@@ -222,23 +227,31 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
         setLoading(true);
         const result = await aggiungiLuogo(id, user, formData, openingHours)
         if (result.success && user.isAdmin == 0) {
-            setProgress(3)
-            handleConfetti();
+            setProgress(4)
         } else if (result.success && user.isAdmin == 1) {
             router.push('/moderation')
         } else {
             setErrorMsg(result)
         }
 
-        console.log(formData)
-        console.log(openingHours)
         setLoading(false);
     };
+
+    const handleDelete = async () => {
+        if (count < 3) {
+            setCount(x => x + 1)
+            return;
+        }
+        const result = await deleteLuogo(id)
+        if (result) {
+            router.push("/moderation")
+        }
+    }
 
     const renderMapForm = () => {
         const btnClasses = clsx(
             "cta-button",
-            (formData.placeLat && formData.placeLong) ? "primary" : "disabled"
+            (formData.placeLat && formData.placeLong) ? "primary" : "disabled noClick"
         );
 
         const mapHTML = generateMapHTML(position)
@@ -285,10 +298,10 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
         )
     }
 
-    const renderInfoForm = () => {
+    const renderEditForm = () => {
         const btnClasses = clsx(
             "cta-button",
-            (formData.placeName.length > 0 && formData.description.length > 0) ? "primary" : "disabled"
+            (formData.placeName.length > 0 && formData.description.length > 0) ? "primary" : "disabled noClick"
         );
 
         return (
@@ -307,12 +320,60 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
                                 placeholder="Nome del luogo" />
                         }
                         <textarea
-                            className="textarea w-full text-[16px]"
+                            className="textarea w-full text-[16px] h-[300px]"
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
                             placeholder="Descrizione del luogo"
                         />
+                    </div>
+                </div>
+                <button className={btnClasses} onClick={() => setProgress(2)}><BiCheck size={20} />Avanti</button>
+            </div>
+        )
+    }
+
+    const renderInfoForm = () => {
+        const btnClasses = clsx(
+            "cta-button",
+            (formData.placeName.length > 0 && formData.description.length > 0) ? "primary" : "disabled noClick"
+        );
+
+        return (
+            <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-5 items-center justify-between">
+                    <div className="w-full flex flex-col">
+                        <h3 className="w-full font-medium">Tipologia di ingresso</h3>
+                        <div className="switch">
+                            <div>
+                                <span>
+                                    Serve la tessera
+                                </span>
+                                <div>
+                                    <input type="checkbox"
+                                        id="hasTicket"
+                                        name="hasTicket"
+                                        checked={formData.hasTicket}
+                                        onChange={handleChange} />
+                                    <label htmlFor="hasTicket">{''}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="switch">
+                            <div>
+                                <span>
+                                    Consumazione obbligatoria
+                                </span>
+                                <div>
+                                    <input type="checkbox"
+                                        id="hasConsumption"
+                                        name="hasConsumption"
+                                        checked={formData.hasConsumption}
+                                        onChange={handleChange} />
+                                    <label htmlFor="hasConsumption">{''}</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="w-full flex flex-col">
                         <h3 className="w-full font-medium">Servizi</h3>
@@ -379,21 +440,36 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
                         <div className="switch">
                             <div>
                                 <span>
-                                    Serve una tessera
+                                    Smart Woking
                                 </span>
                                 <div>
                                     <input type="checkbox"
-                                        id="hasTicket"
-                                        name="hasTicket"
-                                        checked={formData.hasTicket}
+                                        id="hasSmart"
+                                        name="hasSmart"
+                                        checked={formData.hasSmart}
                                         onChange={handleChange} />
-                                    <label htmlFor="hasTicket">{''}</label>
+                                    <label htmlFor="hasSmart">{''}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="switch">
+                            <div>
+                                <span>
+                                    Luogo silenzioso
+                                </span>
+                                <div>
+                                    <input type="checkbox"
+                                        id="hasSilence"
+                                        name="hasSilence"
+                                        checked={formData.hasSilence}
+                                        onChange={handleChange} />
+                                    <label htmlFor="hasSilence">{''}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button className={btnClasses} onClick={() => setProgress(2)}><BiCheck size={20} />Avanti</button>
+                <button className={btnClasses} onClick={() => setProgress(3)}><BiCheck size={20} />Avanti</button>
             </div>
         )
     }
@@ -410,6 +486,10 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
                 )
             }
         }
+        const btnClasses = clsx(
+            "cta-button",
+            count > 2 ? "primary" : "disabled"
+        );
 
         return (
             <div className="flex flex-col gap-5">
@@ -446,7 +526,7 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
                                     </div>
                                     {giorno.isOpen &&
                                         <div className="-mt-2">
-                                            <div className="flex items-center gap-4">
+                                            <div className="w-full flex items-center justify-between gap-4 py-2">
                                                 <input
                                                     className="input text-[16px]"
                                                     type="time"
@@ -480,21 +560,33 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
                         :
                         <button className="cta-button primary" onClick={handleSend}>{btnText()}</button>
                     }
+                    {(user.isAdmin == 1 && id != "new") && <button className={btnClasses} onClick={handleDelete}><BiTrash size={20} />Elimina</button>}
                 </div>
             </div>
         )
     }
 
-    // TODO:
     const renderSuccess = () => {
+        handleConfetti()
         return (
-            <>User Success</>
+            <div className="flex flex-1 justify-center">
+                <div className="flex flex-col gap-10 justify-center items-center w-[90%]">
+                    <div className="flex flex-col items-center gap-5">
+                        <div className="flex items-center gap-2.5">
+                            <span className="text-[1.6rem]">🎉</span>
+                            <p className="font-medium text-[1.2rem]">Grazie per il tuo contributo!</p>
+                        </div>
+                        <p className="text-center">Lo spazio è stato ricevuto con successo ed è ora in fase di revisione da parte del nostro team.</p>
+                    </div>
+                    <Link href="/" className="cta-button outline"><div><BiHome size={20} /></div>Torna alla home</Link>
+                </div>
+            </div>
         )
     }
 
     return (
-        <div className="flex flex-col gap-4 mt-4">
-            {progress != 3 && (
+        <div className="flex flex-col flex-1 gap-4 mt-4">
+            {progress != 4 && (
                 <ol className="flex gap-4 justify-between py-3 items-center">
                     <li>
                         <button className="cursor-pointer text-(--primary)" onClick={() => setProgress(0)}>
@@ -520,6 +612,16 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
                         <button className={`${progress > 1 ? "cursor-pointer text-(--primary)" : "pointer-events-none text-(--contrast-02)"}`} onClick={() => setProgress(2)}>
                             <span className={`${progress > 1 ? "before:bg-(--primary-light) before:opacity-20" : "before:bg-(--contrast-005)"} relative flex items-center justify-center h-10 w-10 overflow-hidden rounded-full before:content-[''] before:absolute before:inset-0 before:w-full before:h-full`}>
                                 <div className="ml-px">
+                                    <BiInfoCircle size={20} />
+                                </div>
+                            </span>
+                        </button>
+                    </li>
+                    <li className={`w-full border-t-4 rounded-full ${progress > 2 ? "border-t-(--primary)" : "border-t-(--contrast-01)"}`}></li>
+                    <li>
+                        <button className={`${progress > 2 ? "cursor-pointer text-(--primary)" : "pointer-events-none text-(--contrast-02)"}`} onClick={() => setProgress(3)}>
+                            <span className={`${progress > 2 ? "before:bg-(--primary-light) before:opacity-20" : "before:bg-(--contrast-005)"} relative flex items-center justify-center h-10 w-10 overflow-hidden rounded-full before:content-[''] before:absolute before:inset-0 before:w-full before:h-full`}>
+                                <div className="ml-px">
                                     <BiTime size={20} />
                                 </div>
                             </span>
@@ -528,9 +630,10 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
                 </ol>
             )}
             {progress == 0 && renderMapForm()}
-            {progress == 1 && renderInfoForm()}
-            {progress == 2 && renderOrarioForm()}
-            {progress == 3 && renderSuccess()}
+            {progress == 1 && renderEditForm()}
+            {progress == 2 && renderInfoForm()}
+            {progress == 3 && renderOrarioForm()}
+            {progress == 4 && renderSuccess()}
         </div>
 
     );

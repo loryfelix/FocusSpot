@@ -69,7 +69,7 @@ export default function FormLogin() {
 
     const btnClasses = clsx(
         "cta-button",
-        (usernameString.length > 0) ? "primary" : "disabled"
+        (usernameString.length > 0) ? "primary" : "disabled noClick"
     );
 
     return (

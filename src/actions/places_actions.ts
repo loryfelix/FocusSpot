@@ -1,5 +1,6 @@
 "use server"
 import { pool } from "@/src/lib/db";
+import { sendEmail } from "../utils/send_mail";
 
 export async function aggiungiLuogo(id: any, user: any, formData: any, openingHours: any) {
     const stato = user.isAdmin ? 2 : 0;
@@ -19,12 +20,15 @@ export async function aggiungiLuogo(id: any, user: any, formData: any, openingHo
                 has_power_sockets,
                 has_air,
                 has_heating,
+                has_smart,
+                has_silence,
                 has_ticket,
+                has_consumption,
                 uid,
                 stato,
                 data_accettazione,
                 opening_hours
-            ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`,
+            ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`,
             [
                 formData.placeName,
                 formData.description,
@@ -34,7 +38,10 @@ export async function aggiungiLuogo(id: any, user: any, formData: any, openingHo
                 formData.hasPowerSockets,
                 formData.hasAir,
                 formData.hasHeating,
+                formData.hasSmart,
+                formData.hasSilence,
                 formData.hasTicket,
+                formData.hasConsumption,
                 user.uid,
                 stato,
                 new Date(),
@@ -55,11 +62,14 @@ export async function aggiungiLuogo(id: any, user: any, formData: any, openingHo
                 has_power_sockets = $6,
                 has_air = $7,
                 has_heating = $8,
-                has_ticket = $9,
-                stato = $10,
-                data_accettazione = $11,
-                opening_hours = $12
-            WHERE id = $13`,
+                has_smart = $9,
+                has_silence = $10,
+                has_ticket = $11,
+                has_consumption = $12,
+                stato = $13,
+                data_accettazione = $14,
+                opening_hours = $15
+            WHERE id = $16`,
             [
                 formData.placeName,
                 formData.description,
@@ -69,10 +79,13 @@ export async function aggiungiLuogo(id: any, user: any, formData: any, openingHo
                 formData.hasPowerSockets,
                 formData.hasAir,
                 formData.hasHeating,
+                formData.hasSmart,
+                formData.hasSilence,
                 formData.hasTicket,
+                formData.hasConsumption,
                 stato,
                 new Date(),
-                JSON.stringify(openingHours), // converti in JSONB
+                JSON.stringify(openingHours),
                 id
             ]
         );
@@ -81,8 +94,17 @@ export async function aggiungiLuogo(id: any, user: any, formData: any, openingHo
 
     if (result) {
         if (user.isAdmin == 0) {
-            // TODO: send email
-            return { success: true };
+            const sended = await sendEmail({
+                to: "no-reply@avabucks.it",
+                subject: "Richiesta di accettazione spazio studio",
+                html: `
+                    <div>
+                        <p>Utente: ${user.username}</p>
+                        <p>Luogo: ${formData.placeName}</p>
+                    </div>
+                    `
+            });
+            return { success: sended.success || true };
         } else {
             return { success: true };
         }
@@ -103,7 +125,10 @@ export async function getPlaceFromId(id: any) {
             has_power_sockets,
             has_air,
             has_heating,
+            has_smart,
+            has_silence,
             has_ticket,
+            has_consumption,
             opening_hours
          FROM places
          WHERE id = $1`,
@@ -124,8 +149,41 @@ export async function getPlaceFromId(id: any) {
             hasPowerSockets: row.has_power_sockets,
             hasAir: row.has_air,
             hasHeating: row.has_heating,
+            hasSmart: row.has_smart,
+            hasSilence: row.has_silence,
             hasTicket: row.has_ticket,
+            hasConsumption: row.has_consumption,
         },
         openingHours: row.opening_hours
     };
+}
+
+export async function deleteLuogo(id: any) {
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM places WHERE id = $1',
+      [id]
+    );
+    return result.rowCount;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+
+}
+
+export async function mailContact(formData: any) {
+    const sended = await sendEmail({
+        to: "no-reply@avabucks.it",
+        subject: formData.oggetto,
+        html: `
+            <div>
+                <p>Email: ${formData.email}</p>
+                ${formData.placeName ? `<p>Luogo d'interesse: ${formData.placeName}</p>` : ""}
+                <p>Testo: ${formData.testo}</p>
+            </div>
+            `
+    });
+    return { success: sended.success };
 }

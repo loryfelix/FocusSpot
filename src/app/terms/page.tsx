@@ -27,6 +27,11 @@ export default function Terms() {
             <p>Il Sito fornisce mappe e informazioni sulle aule studio e spazi di lavoro. I dati sono raccolti da fonti pubbliche e dagli stessi Utenti. Il Sito ha finalità informative e organizzative, ma non garantisce la disponibilità effettiva o la correttezza costante delle informazioni.</p>
           </div>
           <div className="flex flex-col gap-2.5">
+            <h3 className="font-semibold text-[1.3rem] w-full border-t border-t-(--contrast-01) pt-4">Attribuzione</h3>
+            <p>Le mappe e i dati geografici presenti sul Sito sono forniti da OpenStreetMap (OSM) e dai suoi collaboratori, disponibili sotto licenza Open Database License (ODbL).</p>
+            <p>Maggiori informazioni <a href="https://www.openstreetmap.org/copyright" target="_blank" className="text-(--primary-light) underline">qui</a>.</p>
+          </div>
+          <div className="flex flex-col gap-2.5">
             <h3 className="font-semibold text-[1.3rem] w-full border-t border-t-(--contrast-01) pt-4">Esclusione di responsabilità</h3>
             <p>I Creatori non garantiscono l'assoluta correttezza o aggiornamento dei dati sulle aule studio e non sono responsabili per eventuali errori o modifiche non riportate. L'uso delle informazioni presenti sul Sito è a esclusivo rischio dell'Utente.</p>
           </div>
@@ -76,11 +81,6 @@ export default function Terms() {
             </ul>
             <p>Ulteriori informazioni sulla licenza CC BY-SA 4.0 sono disponibili <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" target="_blank" className="text-(--primary-light) underline">qui</a>.</p>
             <p>Gli Utenti non possono utilizzare il Sito per attività illegali, per accedere a dati riservati né per scopi contrari alla legge.</p>
-          </div>
-          <div className="flex flex-col gap-2.5">
-            <h3 className="font-semibold text-[1.3rem] w-full border-t border-t-(--contrast-01) pt-4">Attribuzione</h3>
-            <p>Le mappe e i dati geografici presenti sul Sito sono forniti da OpenStreetMap (OSM) e dai suoi collaboratori, disponibili sotto licenza Open Database License (ODbL).</p>
-            <p>Maggiori informazioni <a href="https://www.openstreetmap.org/copyright" target="_blank" className="text-(--primary-light) underline">qui</a></p>
           </div>
           <div className="flex flex-col gap-2.5">
             <h3 className="font-semibold text-[1.3rem] w-full border-t border-t-(--contrast-01) pt-4">Copyright e proprietà intellettuale</h3>

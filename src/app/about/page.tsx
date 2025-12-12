@@ -49,7 +49,7 @@ export default function About() {
             </p>
             <ul className="list-disc ml-10">
               <li>segnalando nuovi spazi di studio o lavoro da aggiungere alle mappe <Link className="text-(--primary-light) underline" href="/editor/new">qui</Link>,</li>
-              <li>sostenendo il progetto tramite una donazione <Link className="text-(--primary-light) underline" href="https://ko-fi.com/focusspot" target="_blank">qui</Link>.</li>
+              <li>sostenendo il progetto tramite una donazione su <Link className="text-(--primary-light) underline" href="https://ko-fi.com/focusspot" target="_blank">Ko-fi</Link>.</li>
             </ul>
             <p>Il tuo contributo aiuta la community a crescere e a mantenere aggiornate le informazioni sui luoghi disponibili.</p>
           </div>

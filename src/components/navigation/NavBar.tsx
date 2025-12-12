@@ -24,7 +24,7 @@ export default function Navbar() {
             </p>
             <ul className="list-disc space-y-1.5 ml-15 z-1">
               <li>segnalando nuovi spazi di studio o lavoro da aggiungere alle mappe <Link className="text-(--primary-light) underline z-1" href="/editor/new">qui</Link>,</li>
-              <li>sostenendo il progetto tramite una donazione <Link className="text-(--primary-light) underline z-1" href="https://ko-fi.com/focusspot" target="_blank">qui</Link>.</li>
+              <li>sostenendo il progetto tramite una donazione su <Link className="text-(--primary-light) underline z-1" href="https://ko-fi.com/focusspot" target="_blank">Ko-fi</Link>.</li>
             </ul>
           </div>
         </div>
