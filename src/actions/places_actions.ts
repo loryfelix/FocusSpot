@@ -95,7 +95,7 @@ export async function aggiungiLuogo(id: any, user: any, formData: any, openingHo
     if (result) {
         if (user.isAdmin == 0) {
             const sended = await sendEmail({
-                to: "no-reply@avabucks.it",
+                to: "avabuckssociety@gmail.com",
                 subject: "Richiesta di accettazione spazio studio",
                 html: `
                     <div>
@@ -175,7 +175,7 @@ export async function deleteLuogo(id: any) {
 
 export async function mailContact(formData: any) {
     const sended = await sendEmail({
-        to: "no-reply@avabucks.it",
+        to: "avabuckssociety@gmail.com",
         subject: formData.oggetto,
         html: `
             <div>
