@@ -16,13 +16,13 @@ export default async function Home() {
       <NavBar />
       <section>
         <div className="flex flex-col gap-5">
-          <Link href="/">
+          <Link href="https://focusspot-app.vercel.app/" target="_blank">
             <div className="cta-button primary">
               <BiWindowOpen size={24} />
               <span>Apri FocusSpot</span>
             </div>
           </Link>
-          <Link href="/">
+          <Link href="https://focusspot-8b0ad.web.app/focusspot.zip" download>
             <div className="cta-button primary">
               <BiLogoAndroid size={27} />
               <span>Download .APK (Android)</span>

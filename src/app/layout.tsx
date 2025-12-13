@@ -94,4 +94,5 @@ export default async function RootLayout({
 
 // TODOs:
 // - cambiare categorie mettendo la possibilità di metterene una sola
-// - caricare .apk su public e mettere nel button download
+// - cambaire table places production
+// - caricare .apk su public

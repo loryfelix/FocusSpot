@@ -32,14 +32,13 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
         description: "",
         placeLat: null,
         placeLong: null,
+        entryMode: 0,
         hasFreeWifi: false,
         hasPowerSockets: false,
         hasAir: false,
         hasHeating: false,
         hasSmart: false,
         hasSilence: false,
-        hasTicket: false,
-        hasConsumption: false,
     });
     const [openingHours, setOpeningHours] = useState([
         { dayOfWeek: 0, isOpen: false, openTime: "09:00", closeTime: "21:00" },
@@ -181,6 +180,8 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
         const { name, type } = e.target;
 
         let value: string | boolean;
+
+        if (name === "placeName" && e.target.value.length > 30) return;
 
         if (type === "checkbox" && e.target instanceof HTMLInputElement) {
             value = e.target.checked;
@@ -356,36 +357,7 @@ export default function ProfiloLayout({ id }: Readonly<Props>) {
                 <div className="flex flex-col gap-5 items-center justify-between">
                     <div className="w-full flex flex-col">
                         <h3 className="w-full font-medium">Tipologia di ingresso</h3>
-                        <div className="switch">
-                            <div>
-                                <span>
-                                    Serve la tessera
-                                </span>
-                                <div>
-                                    <input type="checkbox"
-                                        id="hasTicket"
-                                        name="hasTicket"
-                                        checked={formData.hasTicket}
-                                        onChange={handleChange} />
-                                    <label htmlFor="hasTicket">{''}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="switch">
-                            <div>
-                                <span>
-                                    Consumazione obbligatoria
-                                </span>
-                                <div>
-                                    <input type="checkbox"
-                                        id="hasConsumption"
-                                        name="hasConsumption"
-                                        checked={formData.hasConsumption}
-                                        onChange={handleChange} />
-                                    <label htmlFor="hasConsumption">{''}</label>
-                                </div>
-                            </div>
-                        </div>
+                        TODO: Accesso libero, Serve la tessera, Consumazione obbligatoria
                     </div>
                     <div className="w-full flex flex-col">
                         <h3 className="w-full font-medium">Servizi</h3>

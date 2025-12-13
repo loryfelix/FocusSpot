@@ -28,7 +28,7 @@ export async function GET(request: Request) {
 
   try {
     const result = await pool.query(`
-      SELECT id, place_name, place_lat, place_long, has_ticket, has_consumption
+      SELECT id, place_name, place_lat, place_long, entry_mode
       FROM places
       WHERE stato=2
     `);
@@ -39,8 +39,7 @@ export async function GET(request: Request) {
       placeLat: row.place_lat,
       placeLong: row.place_long,
       isClosed: false,
-      isTicket: row.has_ticket,
-      isPaid: row.has_consumption,
+      entryMode: row.entry_mode
     }));
 
     return NextResponse.json(customData, {

@@ -11,6 +11,8 @@ import { BiHome, BiSend } from "react-icons/bi";
 export default function UsersPage() {
   const searchParams = useSearchParams();
   const q = searchParams.get("q");
+  const hide = searchParams.get("hide");
+  const showHeaderFooter = !hide || hide === "no";
   const type = q === "segnala" || q === "terms" ? q : "suggerisci";
   const id = searchParams.get("id");
 
@@ -95,7 +97,7 @@ export default function UsersPage() {
             </div>
             <p className="text-center">Ti ringraziamo per averci contattato. La tua richiesta è stata ricevuta e sarà elaborata nei prossimi giorni.</p>
           </div>
-          <Link href="/" className="cta-button outline"><div><BiHome size={20} /></div>Torna alla home</Link>
+          {showHeaderFooter && <Link href="/" className="cta-button outline"><div><BiHome size={20} /></div>Torna alla home</Link>}
         </div>
       </div>
     )
