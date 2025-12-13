@@ -1,4 +1,5 @@
 import Footer from "@/src/components/navigation/Footer";
+import Navbar from "@/src/components/navigation/NavBar";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -7,15 +8,25 @@ export const metadata: Metadata = {
   description: "FocusSpot è l'app che ti aiuta a scoprire i migliori spazi di studio e lavoro condivisi nella tua città. Che tu stia cercando una biblioteca silenziosa per concentrarti sui tuoi esami, un caffè accogliente per lavorare al tuo progetto, o uno spazio di coworking dove incontrare altre persone motivate, FocusSpot ti guida verso il luogo perfetto per te.",
 };
 
-export default function Terms() {
+export default async function Terms({
+  searchParams,
+}: Readonly<{
+  searchParams: Promise<{ hide?: string | string[] }>
+}>) {
+  const { hide } = await searchParams
+  const showHeaderFooter = !hide || hide === "no";
+
   return (
     <>
+      {showHeaderFooter && <Navbar />}
       <section>
-        <div className="mt-[15px]">
-          <h2 className="font-bold text-[2.6rem] leading-[2.7rem]">Termini e condizioni</h2>
-          <p className="mt-2.5 opacity-50 text-[.9rem]">Aggiornati a Gennaio 2026</p>
-        </div>
-        <div className="flex flex-col gap-5 mt-5">
+        {showHeaderFooter && (
+          <div className="mt-[15px] mb-5">
+            <h2 className="font-bold text-[2.6rem] leading-[2.7rem]">Termini e condizioni</h2>
+            <p className="mt-2.5 opacity-50 text-[.9rem]">Aggiornati a Gennaio 2026</p>
+          </div>
+        )}
+        <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2.5">
             <p>Benvenuto su <span className="font-semibold text-(--primary)">FocusSpot</span> (da qui in avanti, il “Sito”), una piattaforma dedicata alla ricerca, condivisione e consultazione di mappe interattive delle aule studio e spazi di studio disponibili.
               L'accesso e l'utilizzo del Sito sono offerti dai suoi creatori (da qui in avanti, i “Creatori”) secondo i termini riportati in questa pagina (“Termini”).
@@ -51,7 +62,7 @@ export default function Terms() {
           </div>
           <div className="flex flex-col gap-2.5">
             <h3 className="font-semibold text-[1.3rem] w-full border-t border-t-(--contrast-01) pt-4">Eliminazione dei dati personali</h3>
-            <p>L'Utente può richiedere la cancellazione completa dei propri dati personali scrivendo nella pagina dedicata: <Link className="text-(--primary-light) underline" href="/contact?q=terms">contattaci</Link>.
+            <p>L'Utente può richiedere la cancellazione completa dei propri dati personali scrivendo nella pagina dedicata{showHeaderFooter && <span>: <Link className="text-(--primary-light) underline" href="/contact?q=terms">contattaci</Link></span>}.
               La richiesta sarà gestita entro 30 giorni.
             </p>
           </div>
@@ -68,7 +79,7 @@ export default function Terms() {
           </div>
           <div className="flex flex-col gap-2.5">
             <h3 className="font-semibold text-[1.3rem] w-full border-t border-t-(--contrast-01) pt-4">Privacy e Cookie</h3>
-            <p>Il Sito rispetta la normativa vigente in materia di protezione dei dati personali (GDPR). I dati raccolti sono limitati a email, nickname e dati tecnici di navigazione (IP, browser, sistema operativo, pagine visitate). I dati vengono utilizzati esclusivamente per gestire il Profilo e migliorare l'esperienza di navigazione. FocusSpot utilizza cookie tecnici (necessari al funzionamento) e, previo consenso, cookie analitici e di profilazione pubblicitaria. L'Utente può modificare le preferenze sui cookie in qualsiasi momento tramite il banner o le impostazioni del browser. Gli Utenti hanno diritto di accedere, modificare o cancellare i propri dati, nonché di revocare il consenso al trattamento scrivendo nella pagina dedicata: <Link className="text-(--primary-light) underline" href="/contact?q=terms">contattaci</Link>.</p>
+            <p>Il Sito rispetta la normativa vigente in materia di protezione dei dati personali (GDPR). I dati raccolti sono limitati a email, nickname e dati tecnici di navigazione (IP, browser, sistema operativo, pagine visitate). I dati vengono utilizzati esclusivamente per gestire il Profilo e migliorare l'esperienza di navigazione. FocusSpot utilizza cookie tecnici (necessari al funzionamento) e, previo consenso, cookie analitici e di profilazione pubblicitaria. L'Utente può modificare le preferenze sui cookie in qualsiasi momento tramite il banner o le impostazioni del browser. Gli Utenti hanno diritto di accedere, modificare o cancellare i propri dati, nonché di revocare il consenso al trattamento scrivendo nella pagina dedicata{showHeaderFooter && <span>: <Link className="text-(--primary-light) underline" href="/contact?q=terms">contattaci</Link></span>}.</p>
             <p>I tuoi dati di posizione vengono utilizzati solo per visualizzare la mappa e non vengono condivisi con terze parti.</p>
           </div>
           <div className="flex flex-col gap-2.5">
@@ -79,21 +90,25 @@ export default function Terms() {
               <li>Deve sempre citare l'autore e la fonte “FocusSpot”;</li>
               <li>Se modifica o rielabora i contenuti, deve distribuirli sotto la stessa licenza.</li>
             </ul>
-            <p>Ulteriori informazioni sulla licenza CC BY-SA 4.0 sono disponibili <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" target="_blank" className="text-(--primary-light) underline">qui</a>.</p>
+            {showHeaderFooter &&
+              <p>Ulteriori informazioni sulla licenza CC BY-SA 4.0 sono disponibili <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" target="_blank" className="text-(--primary-light) underline">qui</a>.</p>
+            }
             <p>Gli Utenti non possono utilizzare il Sito per attività illegali, per accedere a dati riservati né per scopi contrari alla legge.</p>
           </div>
           <div className="flex flex-col gap-2.5">
             <h3 className="font-semibold text-[1.3rem] w-full border-t border-t-(--contrast-01) pt-4">Copyright e proprietà intellettuale</h3>
             <p>I Creatori sono titolari dei diritti relativi al marchio, loghi, grafica e struttura del Sito. I contenuti originali caricati direttamente dai Creatori restano di loro proprietà. I contenuti inviati dagli Utenti vengono condivisi pubblicamente sotto licenza CC BY-SA 4.0. Pubblicando contenuti, l'Utente dichiara di avere tutti i diritti necessari e concede al Sito una licenza irrevocabile, mondiale e gratuita per l'utilizzo, distribuzione e condivisione degli stessi.</p>
           </div>
-          <div className="flex flex-col gap-2.5">
-            <h3 className="font-semibold text-[1.3rem] w-full border-t border-t-(--contrast-01) pt-4">Contatti</h3>
-            <p className="flex flex-col gap-2.5">Per qualsiasi domanda o segnalazione puoi scriverci nella pagina dedicata: <Link className="text-(--primary-light) underline" href="/contact?q=terms">Contattaci</Link>
-            </p>
-          </div>
+          {showHeaderFooter &&
+            <div className="flex flex-col gap-2.5">
+              <h3 className="font-semibold text-[1.3rem] w-full border-t border-t-(--contrast-01) pt-4">Contatti</h3>
+              <p className="flex flex-col gap-2.5">Per qualsiasi domanda o segnalazione puoi scriverci nella pagina dedicata: <Link className="text-(--primary-light) underline" href="/contact?q=terms">Contattaci</Link>
+              </p>
+            </div>
+          }
         </div>
       </section>
-      <Footer />
+      {showHeaderFooter && <Footer />}
     </>
   );
 }

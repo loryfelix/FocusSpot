@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BiWindowOpen, BiLogoAndroid, BiSolidBolt, BiSolidHeart, BiSolidBulb, BiQuestionMark, BiReceipt, BiBadgeCheck } from "react-icons/bi";
 import CheckModerator from "../components/admin/CheckModerator";
+import NavBar from "../components/navigation/NavBar";
 import Footer from "../components/navigation/Footer";
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <>
+      <NavBar />
       <section>
         <div className="flex flex-col gap-5">
           <Link href="/">

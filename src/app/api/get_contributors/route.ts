@@ -1,17 +1,24 @@
 "use server"
+import { pool } from '@/src/lib/db';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
-  if (request.headers.get('x-cron-key') !== process.env.CRON_KEY) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   try {
-    return NextResponse.json("DONE");
+    const result = await pool.query(`
+      SELECT U.username, U.foto_profilo AS "photoURL", COUNT(*) AS "tot"
+      FROM places P JOIN users U ON U.uid = P.uid
+      WHERE stato=2
+      GROUP BY U.username, U.foto_profilo
+      ORDER BY tot DESC
+    `);
+
+    return NextResponse.json(result.rows, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }
-
-// TODOs:
-// - script api che return JSON con key_segreta

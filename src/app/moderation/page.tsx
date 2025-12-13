@@ -1,17 +1,19 @@
 import CheckModerator from "@/src/components/admin/CheckModerator";
 import ListAdmin from "@/src/components/admin/ListAdmin";
 import Footer from "@/src/components/navigation/Footer";
+import Navbar from "@/src/components/navigation/NavBar";
 import UserCard from "@/src/components/user/UserCard";
 
 export default function Admin() {
     return (
         <CheckModerator load={true} closeOnError={true}>
+            <Navbar />
             <section>
                 <UserCard />
                 <div className="flex flex-col gap-5 mt-4">
                     <div className="flex flex-col gap-2">
                         <h3 className="w-full font-medium">Luoghi da revisionare</h3>
-                        <ListAdmin type="rev"/>
+                        <ListAdmin type="rev" />
                     </div>
                     <div className="w-full border-t border-t-(--contrast-01)"></div>
                     <div className="flex flex-col gap-2">

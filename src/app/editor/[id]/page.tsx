@@ -2,6 +2,7 @@ import FormAggiungi from "@/src/components/user/FormAggiungi";
 import Footer from "@/src/components/navigation/Footer";
 import CheckModerator from "@/src/components/admin/CheckModerator";
 import UserCard from "@/src/components/user/UserCard";
+import Navbar from "@/src/components/navigation/NavBar";
 
 export async function generateMetadata({
   params,
@@ -31,6 +32,7 @@ export default async function Profilo({
 
   const renderPage = () => (
     <>
+      <Navbar />
       <section>
         <UserCard />
         <FormAggiungi id={id}></FormAggiungi>

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "../styles/globals.css";
 import "../styles/animations.css";
-import Navbar from "@/src/components/navigation/NavBar";
 import { UserProvider } from "@/src/context/UserContext";
 import { cookies } from "next/headers";
 import { getUser } from "@/src/actions/users_actions";
@@ -84,8 +83,8 @@ export default async function RootLayout({
           <ScrollToTop />
           <UserProvider initialUser={user}>
             <Analytics></Analytics>
-            <Navbar />
-            <main className="flex flex-col h-full flex-1">{children}</main>
+            <main className="flex flex-col h-full flex-1">
+              {children}</main>
           </UserProvider>
         </div>
       </body>
@@ -94,5 +93,5 @@ export default async function RootLayout({
 }
 
 // TODOs:
+// - cambiare categorie mettendo la possibilità di metterene una sola
 // - caricare .apk su public e mettere nel button download
-// - fare api

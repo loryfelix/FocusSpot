@@ -1,4 +1,5 @@
 import Footer from "@/src/components/navigation/Footer";
+import Navbar from "@/src/components/navigation/NavBar";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -7,13 +8,23 @@ export const metadata: Metadata = {
   description: "FocusSpot è l'app che ti aiuta a scoprire i migliori spazi di studio e lavoro condivisi nella tua città. Che tu stia cercando una biblioteca silenziosa per concentrarti sui tuoi esami, un caffè accogliente per lavorare al tuo progetto, o uno spazio di coworking dove incontrare altre persone motivate, FocusSpot ti guida verso il luogo perfetto per te.",
 };
 
-export default function About() {
+export default async function About({
+  searchParams,
+}: Readonly<{
+  searchParams: Promise<{ hide?: string | string[] }>
+}>) {
+  const { hide } = await searchParams
+  const showHeaderFooter = !hide || hide === "no";
+
   return (
     <>
+      {showHeaderFooter && <Navbar />}
       <section>
-        <div className="my-5">
-          <h2 className="font-bold text-[2.6rem] leading-10">Cos'è FocusSpot?</h2>
-        </div>
+        {showHeaderFooter && (
+          <div className="my-5">
+            <h2 className="font-bold text-[2.6rem] leading-10">Cos'è FocusSpot?</h2>
+          </div>
+        )}
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2.5">
             <p>
@@ -55,7 +66,7 @@ export default function About() {
           </div>
         </div>
       </section>
-      <Footer />
+      {showHeaderFooter && <Footer />}
     </>
   );
 }

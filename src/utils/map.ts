@@ -1,5 +1,5 @@
 export function generateMapHTML(position: any): string {
-    const MAP_URL = "https://cartodb-basemaps-a.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}@2x.png";
+    const MAP_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 
     return (
 `<!DOCTYPE html>
@@ -54,7 +54,7 @@ export function generateMapHTML(position: any): string {
                     });
                 });
 
-                tiles = L.tileLayer("${MAP_URL}", { maxZoom: 18, minZoom: 3, noWrap: true, detectRetina: true, tileSize: 512, zoomOffset: -1 }).addTo(map);
+                tiles = L.tileLayer("${MAP_URL}", { maxZoom: 18, minZoom: 3, noWrap: true, detectRetina: true, tileSize: 256 }).addTo(map);
 
             }
 
