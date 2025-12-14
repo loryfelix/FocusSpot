@@ -93,4 +93,3 @@ export default async function RootLayout({
 }
 
 // TODOs:
-// - cambiare categorie mettendo la possibilità di metterene una sola
