@@ -19,13 +19,10 @@ export default function Navbar() {
       {!pathname.includes("editor") && !pathname.includes("moderation") && (
         <div className="animate-[fade-in_.3s] flex items-center my-4 mx-4 rounded-(--border-radius)">
           <div className="relative w-full flex flex-col gap-2.5 overflow-hidden border-solid border-2 border-(--primary) text-(--primary) p-5 rounded-(--border-radius) before:content-[''] before:absolute before:inset-0 before:w-full before:h-full before:bg-(--primary) before:opacity-20">
-            <p className="flex gap-2.5 items-center">
-              <BiInfoCircle size={20} />L'app è ancora in beta. Aiutaci a migliorarla:
-            </p>
-            <ul className="list-disc space-y-1.5 ml-15 z-1">
-              <li>segnalando nuovi spazi di studio o lavoro da aggiungere alle mappe <Link className="text-(--primary-light) underline z-1" href="/editor/new">qui</Link>,</li>
-              <li>sostenendo il progetto tramite una donazione su <Link className="text-(--primary-light) underline z-1" href="https://ko-fi.com/focusspot" target="_blank">Ko-fi</Link>.</li>
-            </ul>
+            <div className="flex gap-2.5 items-center">
+              <div><BiInfoCircle size={20} /></div>
+              <p>L'app è ancora in beta. Puoi aiutarci a migliorarla contribuendo alla mappa.</p>
+            </div>
           </div>
         </div>
       )}

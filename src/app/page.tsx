@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BiWindowOpen, BiLogoAndroid, BiSolidBolt, BiSolidHeart, BiSolidBulb, BiQuestionMark, BiReceipt, BiBadgeCheck } from "react-icons/bi";
+import { BiWindowOpen, BiLogoAndroid, BiSolidBolt, BiHeart, BiBulb, BiQuestionMark, BiReceipt, BiBadgeCheck, BiDownArrowAlt } from "react-icons/bi";
 import CheckModerator from "../components/admin/CheckModerator";
 import NavBar from "../components/navigation/NavBar";
 import Footer from "../components/navigation/Footer";
@@ -15,6 +15,10 @@ export default async function Home() {
     <>
       <NavBar />
       <section>
+        <div className="flex flex-col items-center justify-center gap-2.5 mb-4">
+          <h2 className="text-center w-[90%]">Trova spazi tranquilli per studiare e lavorare vicino a te</h2>
+          <div className="opacity-40"><BiDownArrowAlt size={22} /></div>
+        </div>
         <div className="flex flex-col gap-5">
           <Link href="https://focusspot-app.vercel.app/" target="_blank">
             <div className="cta-button primary">
@@ -23,33 +27,33 @@ export default async function Home() {
             </div>
           </Link>
           <Link href="https://focusspot-8b0ad.web.app/focusspot.zip" download>
-            <div className="cta-button primary">
+            <div className="cta-button outline">
               <BiLogoAndroid size={27} />
               <span>Download .APK (Android)</span>
             </div>
           </Link>
-          <div className="divider">Contribuisci</div>
+          <div className="divider">Vuoi dare una mano?</div>
           <Link href="/editor/new">
             <div className="cta-button primary">
               <BiSolidBolt size={24} />
               <span>Aiuta ad aggiungere nuovi spazi studio!</span>
             </div>
           </Link>
-          <Link href="https://ko-fi.com/focusspot" target="_blank">
-            <div className="cta-button primary">
-              <BiSolidHeart size={24} />
-              <span>Sostieni il progetto</span>
+          <Link href="/contact?q=suggerisci">
+            <div className="cta-button outline">
+              <BiBulb size={24} />
+              <span>Proponi una feature per FocusSpot</span>
             </div>
           </Link>
-          <Link href="/contact?q=suggerisci">
-            <div className="cta-button primary">
-              <BiSolidBulb size={24} />
-              <span>Proponi una feature per FocusSpot</span>
+          <Link href="https://ko-fi.com/focusspot" target="_blank">
+            <div className="cta-button outline">
+              <BiHeart size={24} />
+              <span>Sostieni il progetto</span>
             </div>
           </Link>
           <div className="divider">Informazioni</div>
           <Link href="/about">
-            <div className="cta-button outline">
+            <div className="cta-button primary">
               <BiQuestionMark size={24} />
               <span>Cos'è FocusSpot?</span>
             </div>
