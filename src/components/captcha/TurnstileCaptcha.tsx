@@ -83,6 +83,11 @@ export default function TurnstileCaptcha({
           widgetId.current = turnstile.render(containerRef.current, {
             sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
             callback: (token: string) => onVerifyRef.current(token),
+            theme: 'light', // o 'dark'
+            size: 'normal', // evita 'compact' su iOS
+            appearance: 'interaction-only', // mostra solo quando necessario
+            'refresh-expired': 'auto',
+            'response-field': false, // non aggiungere campi nascosti
           });
         } catch (e) {
           console.error('Errore render Turnstile:', e);
@@ -99,5 +104,12 @@ export default function TurnstileCaptcha({
     return null;
   }
 
-  return <div ref={containerRef} />;
+  return <div
+    ref={containerRef}
+    style={{
+      position: 'relative',
+      isolation: 'isolate',
+      WebkitTransform: 'translateZ(0)',
+      transform: 'translateZ(0)',
+    }} />;
 }
