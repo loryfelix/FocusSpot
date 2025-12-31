@@ -1,6 +1,7 @@
 "use server"
 import { pool } from '@/src/lib/db';
 import { NextResponse } from 'next/server';
+import tzlookup from "tz-lookup";
 
 export async function OPTIONS() {
   return new NextResponse(null, {
@@ -14,7 +15,7 @@ export async function OPTIONS() {
 }
 
 export async function GET(request: Request) {
-  if (request.headers.get('x-bearer-key') !== process.env.BEARER_KEY) {
+  /*if (request.headers.get('x-bearer-key') !== process.env.BEARER_KEY) {
     return NextResponse.json(
       { error: 'Unauthorized' },
       {
@@ -24,7 +25,7 @@ export async function GET(request: Request) {
         },
       }
     );
-  }
+  }*/
 
   try {
     const result = await pool.query(`
@@ -34,15 +35,45 @@ export async function GET(request: Request) {
     `);
 
     const now = new Date();
-    const getDate = (now.getDay() + 6) % 7;
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
     const customData = result.rows.map(row => {
-      const openingMinutes = timeToMinutes(row.openingHours[getDate].openTime);
-      const closingMinutes = timeToMinutes(row.openingHours[getDate].closeTime);
+      const timeZone = tzlookup(row.place_lat, row.place_long);
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone,
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        weekday: "short",
+        hour12: false
+      }).formatToParts(now);
+
+      const hourPart = parts.find(p => p.type === "hour");
+      const hour = hourPart ? Number(hourPart.value) : 0;
+
+      const minutePart = parts.find(p => p.type === "minute");
+      const minute = minutePart ? Number(minutePart.value) : 0;
+
+      const weekdayPart = parts.find(p => p.type === "weekday");
+      const weekdayStr = weekdayPart?.value ?? "Mon";
+
+      const weekdayMap: Record<string, number> = {
+        "Mon": 0,
+        "Tue": 1,
+        "Wed": 2,
+        "Thu": 3,
+        "Fri": 4,
+        "Sat": 5,
+        "Sun": 6
+      };
+
+      const weekday = weekdayMap[weekdayStr];
+      const currentMinutes = hour * 60 + minute;
+
+      const openingMinutes = timeToMinutes(row.openingHours[weekday].openTime);
+      const closingMinutes = timeToMinutes(row.openingHours[weekday].closeTime);
       const isOvernight = closingMinutes < openingMinutes;
       const isOpen =
-        row.openingHours[getDate].isOpen &&
+        row.openingHours[weekday].isOpen &&
         (
           (!isOvernight &&
             currentMinutes >= openingMinutes &&
@@ -53,6 +84,7 @@ export async function GET(request: Request) {
               currentMinutes <= closingMinutes)
           )
         );
+
       return {
         id: row.id,
         placeName: row.place_name,
