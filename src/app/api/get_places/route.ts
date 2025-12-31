@@ -40,12 +40,25 @@ export async function GET(request: Request) {
     const customData = result.rows.map(row => {
       const openingMinutes = timeToMinutes(row.openingHours[getDate].openTime);
       const closingMinutes = timeToMinutes(row.openingHours[getDate].closeTime);
+      const isOvernight = closingMinutes < openingMinutes;
+      const isOpen =
+        row.openingHours[getDate].isOpen &&
+        (
+          (!isOvernight &&
+            currentMinutes >= openingMinutes &&
+            currentMinutes <= closingMinutes
+          ) ||
+          (isOvernight &&
+            (currentMinutes >= openingMinutes ||
+              currentMinutes <= closingMinutes)
+          )
+        );
       return {
         id: row.id,
         placeName: row.place_name,
         placeLat: row.place_lat,
         placeLong: row.place_long,
-        isOpen: row.openingHours[getDate].isOpen && (currentMinutes >= openingMinutes && currentMinutes <= closingMinutes),
+        isOpen: isOpen,
         entryMode: row.entry_mode
       };
     });
