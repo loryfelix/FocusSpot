@@ -12,24 +12,27 @@ export async function checkAdmin(uid: string) {
   return isAdmin;
 }
 
-export async function listReviewAdmin() {
-  const result = await pool.query(
-    `SELECT id, place_name AS "placeName"
-      FROM places
-      WHERE stato = 0
-      ORDER BY data_accettazione DESC, id DESC`
-  );
+export async function listAdmin(searchString: string, stato: number) {
+  let result;
 
-  return result.rows;
-}
-
-export async function listAcceptedAdmin() {
-  const result = await pool.query(
-    `SELECT id, place_name AS "placeName"
+  if (searchString && searchString.trim() !== "") {
+    result = await pool.query(
+      `SELECT id, place_name AS "placeName", similarity(place_name, $2) AS similarity
       FROM places
-      WHERE stato = 2
-      ORDER BY data_accettazione DESC, id DESC`
-  );
+      WHERE stato = $1
+      ORDER BY similarity DESC, data_accettazione DESC, id DESC
+      LIMIT 50`,
+      [stato, searchString]
+    );
+  } else {
+    result = await pool.query(
+      `SELECT id, place_name AS "placeName"
+      FROM places
+      WHERE stato = $1
+      ORDER BY data_accettazione DESC, id DESC`,
+      [stato]
+    );
+  }
 
   return result.rows;
 }

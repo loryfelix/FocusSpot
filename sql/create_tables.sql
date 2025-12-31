@@ -2,13 +2,14 @@
 -- Database : 'proverby'
 -- PostgreSQL
 --
-
 -- --------------------------------------------------------
-
+--
+-- Extension 'pg_trgm' for similarity
+--
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
 --
 -- Table structure for table 'users'
 --
-
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   uid VARCHAR(255) NOT NULL UNIQUE,
@@ -19,11 +20,9 @@ CREATE TABLE IF NOT EXISTS users (
   is_admin INT DEFAULT 0 NOT NULL,
   is_moderator INT DEFAULT 0 NOT NULL
 );
-
 --
 -- Table structure for table 'places'
 --
-
 CREATE TABLE IF NOT EXISTS places (
   id SERIAL PRIMARY KEY,
   place_name VARCHAR(255) NOT NULL,

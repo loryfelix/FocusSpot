@@ -1,21 +1,22 @@
 "use client"
 
-import { listAcceptedAdmin, listReviewAdmin } from "@/src/actions/admin_actions";
+import { listAdmin } from "@/src/actions/admin_actions";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface Props {
     type: string;
+    searchString: string;
 }
 
-export default function ProfiloLayout({ type }: Readonly<Props>) {
+export default function ProfiloLayout({ type, searchString }: Readonly<Props>) {
 
     const [placesArray, setPlacesArray] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         async function loadRewAdmin() {
-            const result = await listReviewAdmin();
+            const result = await listAdmin(searchString, 0);
             if (result) {
                 setPlacesArray(result);
             }
@@ -23,7 +24,7 @@ export default function ProfiloLayout({ type }: Readonly<Props>) {
         }
 
         async function loadAcceptedAdmin() {
-            const result = await listAcceptedAdmin();
+            const result = await listAdmin(searchString, 2);
             if (result) {
                 setPlacesArray(result);
             }
@@ -39,7 +40,7 @@ export default function ProfiloLayout({ type }: Readonly<Props>) {
             loaders[type]();
         }
 
-    }, []);
+    }, [searchString]);
 
     return (
         <>
